@@ -1,8 +1,12 @@
+import logging
+
 from pydantic import BaseModel
 from pydantic_ai import Agent
 
 from reverb_alerts.config import Watch
 from reverb_alerts.models import ReverbListing
+
+logger = logging.getLogger(__name__)
 
 
 class ListingResults(BaseModel):
@@ -30,11 +34,14 @@ def _get_agent() -> Agent[None, ListingResults]:
 
 def parse_listings(markdown: str) -> list[ReverbListing]:
     agent = _get_agent()
+    logger.info("Parsing listings with PydanticAI agent")
     result = agent.run_sync(f"Extract all listings from this Reverb marketplace page:\n\n{markdown}")
+    logger.info("Extracted %d listing(s)", len(result.output.listings))
     return result.output.listings
 
 
 def filter_listings(listings: list[ReverbListing], watch: Watch) -> list[ReverbListing]:
+    logger.debug("Filtering %d listings for watch '%s'", len(listings), watch.name)
     matches = []
     for listing in listings:
         effective_price = listing.price

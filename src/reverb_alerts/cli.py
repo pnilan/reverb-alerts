@@ -1,6 +1,6 @@
-from pathlib import Path
-
+import logging
 import os
+from pathlib import Path
 
 import click
 
@@ -10,14 +10,28 @@ from reverb_alerts.parser import filter_listings, parse_listings
 from reverb_alerts.scraper import scrape_reverb
 
 
+def _setup_logging(debug: bool) -> None:
+    level = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    )
+    if not debug:
+        logging.getLogger("httpx").setLevel(logging.WARNING)
+        logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+
 @click.command()
 @click.option("--config", "config_path", default="./watches.yaml", type=click.Path(exists=True), help="Path to watches config file")
 @click.option("--dry-run", "mode", flag_value="dry-run", help="Print matches without creating issues")
 @click.option("--execute", "mode", flag_value="execute", help="Create GitHub issues for matches")
-def main(config_path: str, mode: str | None) -> None:
+@click.option("--debug", is_flag=True, help="Enable debug logging")
+def main(config_path: str, mode: str | None, debug: bool) -> None:
     if not os.environ.get("CI"):
         from dotenv import load_dotenv
         load_dotenv()
+
+    _setup_logging(debug)
 
     if mode is None:
         raise click.UsageError("Either --dry-run or --execute is required")
