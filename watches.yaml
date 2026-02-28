@@ -1,0 +1,19 @@
+watches:
+  - name: "Fender Jazzmaster"
+    query: "Fender Jazzmaster"
+    max_price: 800.00
+    include_shipping: true
+    location: "US"
+    conditions:
+      - "Excellent"
+      - "Mint"
+      - "Brand New"
+  - name: "Boss RE-202"
+    query: "Boss RE-202"
+    max_price: 250.00
+    include_shipping: false
+    location: "US"
+    conditions:
+      - "Very Good"
+      - "Excellent"
+      - "Mint"
