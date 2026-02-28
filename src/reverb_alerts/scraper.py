@@ -1,7 +1,10 @@
+import logging
 import os
 from urllib.parse import quote
 
 from firecrawl import FirecrawlApp
+
+logger = logging.getLogger(__name__)
 
 
 def scrape_reverb(query: str, location: str | None = None) -> str | None:
@@ -11,6 +14,8 @@ def scrape_reverb(query: str, location: str | None = None) -> str | None:
     if location:
         url += f"&item_region={quote(location)}"
 
+    logger.info("Scraping %s", url)
     result = app.scrape(url, formats=["markdown"])
+    logger.debug("Firecrawl response length: %d chars", len(result.markdown or ""))
 
     return result.markdown
