@@ -35,6 +35,10 @@ watches.yaml → config.py → cli.py → scraper.py → parser.py → notify.py
 4. **Notifier** (`notify.py`): creates GitHub Issues via `gh issue create` subprocess, deduplicates by checking for open issues with same title
 5. **CLI** (`cli.py`): Click entrypoint, `--config` flag for watches.yaml path
 
+## Git Conventions
+
+- Never add "Co-Authored-By" lines for Claude in commits or PRs
+
 ## Key Environment Variables
 
 - `FIRECRAWL_API_KEY` — Firecrawl API access

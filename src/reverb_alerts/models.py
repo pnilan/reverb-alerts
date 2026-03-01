@@ -21,3 +21,4 @@ class ReverbListing(BaseModel):
     seller_location: str | None = None
     url: HttpUrl
     condition: ReverbCondition | None = None
+    is_primary_product: bool = True

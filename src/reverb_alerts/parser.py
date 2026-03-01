@@ -20,7 +20,12 @@ SYSTEM_PROMPT = (
     "shipping cost (as a float, or null if free/not listed), "
     "seller location (or null if not shown), the listing URL, "
     "and the condition (one of: Brand New, Mint, Excellent, Very Good, "
-    "Good, B-Stock, Poor Condition, Non Functioning — or null if not shown)."
+    "Good, B-Stock, Poor Condition, Non Functioning — or null if not shown). "
+    "For each listing, set is_primary_product to true if the listing is the "
+    "actual main product/instrument/unit being searched for, and false if it is "
+    "an accessory, replacement part, adapter, cable, case, cover, knob, "
+    "footswitch, or other peripheral item. For example, if searching for "
+    "'Boss RE-202', an AC adapter for the RE-202 is NOT a primary product."
 )
 
 
@@ -44,6 +49,9 @@ def filter_listings(listings: list[ReverbListing], watch: Watch) -> list[ReverbL
     logger.debug("Filtering %d listings for watch '%s'", len(listings), watch.name)
     matches = []
     for listing in listings:
+        if not listing.is_primary_product:
+            logger.debug("Skipping accessory: %s", listing.title)
+            continue
         effective_price = listing.price
         if watch.include_shipping and listing.shipping_cost is not None:
             effective_price += listing.shipping_cost
