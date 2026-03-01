@@ -1,4 +1,5 @@
 import logging
+import re
 
 from pydantic import BaseModel
 from pydantic_ai import Agent
@@ -37,10 +38,17 @@ def _get_agent() -> Agent[None, ListingResults]:
     )
 
 
-def parse_listings(markdown: str) -> list[ReverbListing]:
+def parse_listings(markdown: str, product_query: str) -> list[ReverbListing]:
     agent = _get_agent()
     logger.info("Parsing listings with PydanticAI agent")
-    result = agent.run_sync(f"Extract all listings from this Reverb marketplace page:\n\n{markdown}")
+    prompt = (
+        f"The user is searching for: '{product_query}'. "
+        f"Extract all listings from this Reverb marketplace page. "
+        f"Set is_primary_product to true ONLY if the listing is actually a '{product_query}' unit. "
+        f"Any other product, even from the same brand, should be marked as is_primary_product=false.\n\n"
+        f"{markdown}"
+    )
+    result = agent.run_sync(prompt)
     logger.info("Extracted %d listing(s)", len(result.output.listings))
     return result.output.listings
 
@@ -52,6 +60,13 @@ def filter_listings(listings: list[ReverbListing], watch: Watch) -> list[ReverbL
         if not listing.is_primary_product:
             logger.debug("Skipping accessory: %s", listing.title)
             continue
+
+        if watch.exclude_terms:
+            excluded = [term for term in watch.exclude_terms if re.search(rf"\b{re.escape(term)}\b", listing.title, re.IGNORECASE)]
+            if excluded:
+                logger.debug("Skipping excluded term %s: %s", excluded, listing.title)
+                continue
+
         effective_price = listing.price
         if watch.include_shipping and listing.shipping_cost is not None:
             effective_price += listing.shipping_cost

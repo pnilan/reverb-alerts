@@ -13,6 +13,7 @@ class Watch(BaseModel):
     include_shipping: bool = False
     location: str | None = None
     conditions: list[ReverbCondition] | None = None
+    exclude_terms: list[str] | None = None
 
 
 class WatchConfig(BaseModel):
