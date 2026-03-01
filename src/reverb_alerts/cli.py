@@ -59,7 +59,8 @@ def main(config_path: str, mode: str | None, debug: bool) -> None:
                 click.echo(f"    - {listing.title}: ${listing.price:.2f} + ${shipping:.2f} shipping = ${total:.2f} [{condition}]")
                 click.echo(f"      {listing.url}")
         else:
-            if create_alert(watch.name, matches):
+            created = create_alert(watch.name, matches)
+            if created:
                 click.echo(f"  Created GitHub issue for {watch.name}")
             else:
-                click.echo(f"  Issue already exists for {watch.name}, skipping")
+                click.echo(f"  Skipped issue for {watch.name} (already exists or failed to create)")
