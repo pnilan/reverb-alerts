@@ -1,7 +1,7 @@
 watches:
   - name: "Line 6 HX Stomp"
     query: "Line 6 HX Stomp"
-    max_price: 500.00
+    max_price: 400.00
     include_shipping: true
     location: "US"
     conditions:
