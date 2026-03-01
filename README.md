@@ -13,7 +13,7 @@ A CLI tool that monitors [Reverb.com](https://reverb.com) for musical gear deals
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.14+
 - [uv](https://docs.astral.sh/uv/)
 
 ### Install dependencies
@@ -35,15 +35,15 @@ Define watches in `watches.yaml`:
 
 ```yaml
 watches:
-  - name: "Fender Jazzmaster"
-    query: "Fender Jazzmaster"
-    max_price: 800.00
+  - name: "Line 6 HX Stomp"
+    query: "Line 6 HX Stomp"
+    max_price: 400.00
     include_shipping: true
     location: "US"
     conditions:
+      - "Very Good"
       - "Excellent"
       - "Mint"
-      - "Brand New"
 ```
 
 | Field | Required | Default | Description |
@@ -58,14 +58,17 @@ watches:
 ## Usage
 
 ```sh
-# Check for deals and create GitHub Issues
-uv run reverb-alerts check
-
 # Preview matches without creating issues
-uv run reverb-alerts check --dry-run
+uv run reverb-alerts --dry-run
+
+# Check for deals and create GitHub Issues
+uv run reverb-alerts --execute
 
 # Use a custom config file
-uv run reverb-alerts check --config path/to/watches.yaml
+uv run reverb-alerts --dry-run --config path/to/watches.yaml
+
+# Enable debug logging (includes httpx traffic)
+uv run reverb-alerts --dry-run --debug
 ```
 
 ## GitHub Actions
