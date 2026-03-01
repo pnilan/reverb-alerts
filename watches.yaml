@@ -8,3 +8,7 @@ watches:
       - "Very Good"
       - "Excellent"
       - "Mint"
+    exclude_terms:
+      - "XL"
+      - "One"
+      - "Effects"

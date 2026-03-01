@@ -42,7 +42,7 @@ def main(config_path: str, mode: str | None, debug: bool) -> None:
         click.echo(f"Checking: {watch.name} (max ${watch.max_price:.2f})...")
 
         markdown = scrape_reverb(watch.query, watch.max_price, watch.location, watch.conditions)
-        listings = parse_listings(markdown)
+        listings = parse_listings(markdown, watch.query)
         matches = filter_listings(listings, watch)
 
         if not matches:
