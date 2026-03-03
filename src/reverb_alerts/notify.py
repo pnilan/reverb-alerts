@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import subprocess
 
 from reverb_alerts.models import ReverbListing
@@ -57,13 +58,19 @@ def create_alert(watch_name: str, listings: list[ReverbListing]) -> bool:
     _ensure_label("deal-alert")
     body = _format_issue_body(listings)
 
+    cmd = [
+        "gh", "issue", "create",
+        "--title", title,
+        "--body", body,
+        "--label", "deal-alert",
+    ]
+
+    assignee = os.getenv("ASSIGNEE_USERNAME")
+    if assignee:
+        cmd.extend(["--assignee", assignee])
+
     result = subprocess.run(
-        [
-            "gh", "issue", "create",
-            "--title", title,
-            "--body", body,
-            "--label", "deal-alert",
-        ],
+        cmd,
         capture_output=True,
         text=True,
     )
