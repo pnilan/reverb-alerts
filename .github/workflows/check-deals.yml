@@ -1,7 +1,7 @@
 name: Check Reverb Deals
 on:
   schedule:
-    - cron: '0 5,17,23 * * *'
+    - cron: '0 13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4 * * *'
   workflow_dispatch: {}
 jobs:
   check:
@@ -11,6 +11,7 @@ jobs:
     env:
       FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ASSIGNEE_USERNAME: ${{ vars.ASSIGNEE_USERNAME }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
