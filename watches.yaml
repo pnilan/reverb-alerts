@@ -1,14 +1,1 @@
-watches:
-  - name: "Line 6 HX Stomp"
-    query: "Line 6 HX Stomp"
-    max_price: 400.00
-    include_shipping: true
-    location: "US"
-    conditions:
-      - "Very Good"
-      - "Excellent"
-      - "Mint"
-    exclude_terms:
-      - "XL"
-      - "One"
-      - "Effects"
+watches: []
